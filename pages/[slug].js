@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import Layout from "components/layout";
 import { getPostBySlug, getAllPosts } from "lib/api";
@@ -5,12 +6,21 @@ import BlockContent from "@sanity/block-content-to-react";
 import HiglightCode from "components/higlight-code";
 import { urlFor } from "lib/api";
 import PostHeader from "components/post-header";
-import { getPaginatedPosts } from "../lib/api";
+import { getPaginatedPosts, listenPostUpdate } from "../lib/api";
 import { useRouter } from "next/router";
 import PreviewAlert from "components/preview-alert";
 
 export default ({ post, preview }) => {
+  // const [post, setPost] = useState(initialPost);
   const router = useRouter();
+
+  // useEffect(() => {
+  //   const sub = listenPostUpdate(post.slug, (update) => {
+  //     setPost(update.result);
+  //   });
+
+  //   return sub && sub.unsubscribe?.();
+  // }, []);
 
   if (router.isFallback)
     return (
@@ -69,17 +79,14 @@ export const getStaticProps = async ({
   preview = false,
   previewData,
 }) => {
-  console.log(preview, previewData);
-
   const post = await getPostBySlug(params.slug, preview);
-
-  console.log("-------", post);
 
   return {
     props: {
       post: post.length > 1 ? post[1] : post.length > 0 ? post[0] : {},
       preview,
     },
+    revalidate: 6000,
   };
 };
 
