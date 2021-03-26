@@ -9,6 +9,7 @@ export default ({ children }) => {
     <div className={theme.type}>
       <Container>
         <MyNavbar />
+
         <div className="blog-detail-page">
           <div className={`page-wrapper`}>{children}</div>
         </div>

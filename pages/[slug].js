@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import Layout from "components/layout";
 import { getPostBySlug, getAllPosts } from "lib/api";
@@ -10,17 +9,8 @@ import { getPaginatedPosts, listenPostUpdate } from "../lib/api";
 import { useRouter } from "next/router";
 import PreviewAlert from "components/preview-alert";
 
-export default ({ post, preview }) => {
-  // const [post, setPost] = useState(initialPost);
+const PostDetail = ({ post, preview }) => {
   const router = useRouter();
-
-  // useEffect(() => {
-  //   const sub = listenPostUpdate(post.slug, (update) => {
-  //     setPost(update.result);
-  //   });
-
-  //   return sub && sub.unsubscribe?.();
-  // }, []);
 
   if (router.isFallback)
     return (
@@ -54,6 +44,8 @@ export default ({ post, preview }) => {
     </Layout>
   );
 };
+
+export default PostDetail;
 
 const serializers = {
   types: {

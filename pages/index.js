@@ -1,16 +1,16 @@
 import { Row, Col, Button } from "react-bootstrap";
 import GridItem from "components/grid-item";
-import { getAllPosts } from "lib/api";
 import Layout from "components/layout";
 import Intro from "components/intro";
 import { useSWRInfinite } from "swr";
 import { getPaginatedPosts } from "../lib/api";
 import PreviewAlert from "components/preview-alert";
+import Nprogress from "nprogress";
 
 const PAGE_LIMIT = 3;
 
 export default function Home({ posts, preview }) {
-  const { data, size, setSize } = useSWRInfinite(
+  const { data, size, setSize, isValidating } = useSWRInfinite(
     (index) => `/api/posts?page=${index}&limit=${PAGE_LIMIT}`,
     { initialData: [posts] }
   );
@@ -35,9 +35,12 @@ export default function Home({ posts, preview }) {
         )}
       </Row>
       <div style={{ textAlign: "center" }}>
-        {data[data.length - 1].length !== 0 && (
-          <Button onClick={() => setSize(size + 1)}>Дахиад үзэх ...</Button>
-        )}
+        {data[data.length - 1].length !== 0 &&
+          (isValidating ? (
+            <div style={{ fontSize: 14 }}>Түр хүлээнэ үү ...</div>
+          ) : (
+            <Button onClick={() => setSize(size + 1)}>Дахиад үзэх ...</Button>
+          ))}
       </div>
     </Layout>
   );
